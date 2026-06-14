@@ -152,26 +152,26 @@ QOIDALAR:
         ? "Talaba o'rtacha — asoslarni mustahkamlab, keyin murakkabga o'ting"
         : "Talaba yangi boshlovchi — eng oddiy tushunchalardan boshlab asta-sekin rivojlantiring";
     const sys = `Siz o'zbek tilida ta'lim beradigan AI o'qituvchisiz. Faqat sof JSON qaytaring, boshqa hech narsa yozmang.`;
-    const prompt = `"${goalStr}" kursidan ${lv} darajadagi o'quvchi uchun 8 darslik progressiv o'quv yo'li tuzing.
+    const prompt = `"${goalStr}" kursidan ${lv} darajadagi o'quvchi uchun 10 darslik progressiv o'quv yo'li tuzing.
 
 MUHIM QOIDALAR:
 - ${lvNote}
 - Darslar MANTIQIY TARTIBDA bo'lsin: har bir dars oldingisiga tayansin
 - Asosni o'rganmasdan murakkab mavzuga o'tma — hatto Yuqori daraja uchun ham progressiv tartib saqlang
 - "${goalStr}" mavzusining tabiiy o'quv yo'lini kuzat
-- 8 ta dars "${goalStr}" ni to'liq va bosqichma-bosqich qamrab olsin
+- Aniq 10 ta dars bo'lsin — "${goalStr}" ni to'liq va bosqichma-bosqich qamrab olsin
 
 Quyidagi JSON formatida qaytaring:
 {"courseName":"...","lessons":[{"title":"...","subtitle":"...","xp":100}]}
 XP 50-200 oralig'ida. Faqat o'zbek tilida.`;
     let built: PathData;
     try {
-      const r = await callGemini([{ role: 'user', content: prompt }], sys, 2000);
+      const r = await callGemini([{ role: 'user', content: prompt }], sys, 2800);
       built = JSON.parse(stripJson(r)) as PathData;
     } catch {
       built = {
         courseName: goalStr + ' asoslari',
-        lessons: Array.from({ length: 8 }, (_, i) => ({
+        lessons: Array.from({ length: 10 }, (_, i) => ({
           title: `${goalStr} — ${i + 1}-dars`,
           subtitle: `Mavzu ${i + 1}`,
           xp: Math.min((i + 1) * 50, 200),
@@ -318,7 +318,7 @@ XP 50-200 oralig'ida. Faqat o'zbek tilida.`;
               Sizning o&apos;quv yo&apos;lingiz 🗺️
             </h2>
             <p style={{ color: 'var(--text2)', fontSize: 12, marginBottom: 18, lineHeight: 1.6 }}>
-              Daraja: <strong style={{ color: 'var(--violet-l)' }}>{detectedLevel}</strong> · 8 ta dars · Hozirdanoq boshlash mumkin!
+              Daraja: <strong style={{ color: 'var(--violet-l)' }}>{detectedLevel}</strong> · {newPathData.lessons.length} ta dars · Hozirdanoq boshlash mumkin!
             </p>
             <div className="path-grid">
               {newPathData.lessons.map((l, i) => (

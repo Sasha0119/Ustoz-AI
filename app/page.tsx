@@ -64,8 +64,9 @@ export default function LandingPage() {
         <div className="chip">🎯 AI-powered</div>
         <div className="chip">🏆 Gamified</div>
         <div className="chip">🇺🇿 O&apos;zbek tilida</div>
-        <div className="chip">⚡ 8 ta dars</div>
-      </div>
+<div className="chip">
+  ⚡ <span style={{ fontSize: '1.4em', verticalAlign: 'middle', lineHeight: '1' }}>∞</span> ta dars
+</div>      </div>
 
       {/* Stats */}
       <div className="stats-grid" style={{ position: 'relative', zIndex: 1 }}>

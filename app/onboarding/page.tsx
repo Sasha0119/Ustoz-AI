@@ -178,6 +178,27 @@ XP 50-200 oralig'ida. Faqat o'zbek tilida.`;
         })),
       };
     }
+
+    // Guarantee EXACTLY 10 lessons no matter what the model returned — trim if
+    // it gave more, pad with deepening/practice lessons if it gave fewer (the
+    // model often ignores "10" and returns 8). Per-lesson content is generated
+    // on demand later, so a padded title still gets full AI teaching when opened.
+    const TARGET = 10;
+    const got = Array.isArray(built.lessons) ? built.lessons : [];
+    if (got.length > TARGET) {
+      built.lessons = got.slice(0, TARGET);
+    } else if (got.length < TARGET) {
+      const pad = Array.from({ length: TARGET - got.length }, (_, k) => {
+        const n = got.length + k + 1;
+        return {
+          title: `${goalStr} — ${n}-dars`,
+          subtitle: 'Chuqurlashtirilgan amaliyot va mustahkamlash',
+          xp: Math.min(60 + n * 14, 200),
+        };
+      });
+      built.lessons = [...got, ...pad];
+    }
+
     setPathData(built);
     setNewPathData(built);
     await saveProgress(user!.id, {

@@ -2,6 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { ChatMessage } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
+// Vercel kills functions at 10s by default. Fallback providers (Gemini/OpenRouter)
+// can take ~15s for a full lesson, and the chain may try more than one — so raise
+// the limit. 60s is the max on Vercel's Hobby (free) plan.
+export const maxDuration = 60;
+
+// Per-provider request timeout: if one provider hangs, abort and try the next
+// instead of burning the whole function budget on a single slow call.
+const PROVIDER_TIMEOUT_MS = 28000;
+
+function fetchWithTimeout(url: string, init: RequestInit): Promise<Response> {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), PROVIDER_TIMEOUT_MS);
+  return fetch(url, { ...init, signal: ctrl.signal }).finally(() => clearTimeout(t));
+}
 
 /* ───────────────────────────────────────────────────────────────
    Multi-provider AI failover.
@@ -57,7 +71,7 @@ async function callOpenAICompatible(
   if (system) msgs.push({ role: 'system', content: system });
   for (const m of messages) msgs.push({ role: m.role, content: m.content });
 
-  const res = await fetch(url, {
+  const res = await fetchWithTimeout(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}`, ...extraHeaders },
     body: JSON.stringify({ model, messages: msgs, max_tokens: maxTokens }),
@@ -92,7 +106,7 @@ async function callGeminiProvider({ key, messages, system, maxTokens }: AiParams
     generationConfig: { maxOutputTokens: maxTokens, thinkingConfig: { thinkingBudget: 0 } },
   };
 
-  const res = await fetch(url, {
+  const res = await fetchWithTimeout(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

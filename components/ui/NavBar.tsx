@@ -32,7 +32,7 @@ export default function NavBar() {
 
         {/* Streak */}
         {streak > 0 && (
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#F59E0B', display: 'flex', alignItems: 'center', gap: 3 }}>
+          <div className="nav-streak" style={{ fontSize: 13, fontWeight: 700, color: '#F59E0B', display: 'flex', alignItems: 'center', gap: 3 }}>
             <span className="streak-flame"
               style={{ fontSize: streak >= 7 ? 17 : 14 }}>
               🔥
@@ -48,7 +48,7 @@ export default function NavBar() {
         {user && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div className="nav-avatar">{(user.name?.[0] ?? '?').toUpperCase()}</div>
-            <span style={{ fontSize: 13, color: 'var(--text2)', fontWeight: 500 }}>
+            <span className="nav-username" style={{ fontSize: 13, color: 'var(--text2)', fontWeight: 500 }}>
               {user.name}
             </span>
           </div>

@@ -27,7 +27,7 @@ export default function AdminPage() {
   return (
     <div className="has-nav">
       <NavBar />
-      <div style={{ padding: 32, maxWidth: 940, margin: '0 auto' }}>
+      <div className="page-wrap wide">
         <div className="screen-hdr">
           <div className="back-btn" onClick={() => router.push('/dashboard')}>←</div>
           <div className="screen-title">⚙ Admin Panel</div>

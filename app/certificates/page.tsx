@@ -52,7 +52,7 @@ export default function CertificatesPage() {
   return (
     <div className="has-nav">
       <NavBar />
-      <div style={{ padding: '32px', maxWidth: 760, margin: '0 auto' }}>
+      <div className="page-wrap narrow">
         <div className="screen-hdr">
           <button className="back-btn" onClick={() => router.push('/dashboard')} aria-label="Orqaga">←</button>
           <div className="screen-title">🎓 Sertifikatlar</div>

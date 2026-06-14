@@ -64,7 +64,7 @@ export default function DashboardPage() {
   return (
     <div className="has-nav">
       <NavBar />
-      <div style={{ padding: '32px', maxWidth: 900, margin: '0 auto' }}>
+      <div className="page-wrap wide">
 
         {/* Greeting */}
         <div className="dash-hdr slide-up">

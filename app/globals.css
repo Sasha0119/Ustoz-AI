@@ -893,7 +893,7 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.65; }
 /* ═════════════════════════════════════════════════════════════
    CERTIFICATES
    ═════════════════════════════════════════════════════════════ */
-.cert-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 16px; }
+.cert-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%, 280px),1fr)); gap: 16px; }
 .cert-card {
   background: var(--bg2);
   border: 1px solid rgba(255,255,255,.08);
@@ -936,26 +936,106 @@ textarea.input { resize: vertical; min-height: 100px; line-height: 1.65; }
 .adm-table tr:hover td { background: var(--bg3); }
 
 /* ═════════════════════════════════════════════════════════════
-   RESPONSIVE
+   PAGE CONTAINER — fluid padding, centered, scales to screen
    ═════════════════════════════════════════════════════════════ */
+.page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(18px, 3.5vw, 36px) clamp(16px, 4vw, 32px);
+}
+.page-wrap.narrow { max-width: 760px; }
+.page-wrap.wide   { max-width: 960px; }
+
+/* ═════════════════════════════════════════════════════════════
+   RESPONSIVE — ultrawide › wide › laptop › tablet › phone
+   ═════════════════════════════════════════════════════════════ */
+
+/* ── Ultra-wide & large monitors: let big screens breathe ── */
+@media (min-width: 1600px) {
+  .page-wrap        { max-width: 1040px; }
+  .page-wrap.wide   { max-width: 1240px; }
+  .page-wrap.narrow { max-width: 880px; }
+  .lesson-content   { max-width: 880px; }
+  .ls-main          { padding: 40px 48px; }
+  .ls-sidebar       { width: 320px; min-width: 320px; }
+  .stats-grid       { max-width: 760px; }
+}
+
+/* ── Small laptop / tablet landscape ── */
+@media (max-width: 1024px) {
+  .ls-sidebar { width: 240px; min-width: 240px; }
+  .ls-main    { padding: 28px 24px; }
+}
+
+/* ── Tablet portrait & below ── */
 @media (max-width: 768px) {
   .stats-grid { grid-template-columns: repeat(2,1fr); }
   .stats-row  { grid-template-columns: repeat(2,1fr); }
-  .tagline    { font-size: 2rem; }
-  .land-btns  { flex-direction: column; align-items: center; }
-  #lesson-screen { flex-direction: column; }
-  .ls-sidebar { width: 100%; min-width: unset; height: 200px; }
-  .lb-podium  { gap: 8px; }
-  .podium-av  { width: 42px; height: 42px; font-size: 14px; }
-  .podium-base { width: 74px; }
-  .top-nav { padding: 0 16px; }
+  .tagline    { font-size: clamp(1.9rem, 7vw, 2.6rem); }
+  .subtitle   { font-size: 15px; }
+  .land-btns  { flex-direction: column; align-items: center; width: 100%; }
+  .land-btns .btn { width: 100%; max-width: 320px; justify-content: center; }
+
+  /* Lesson: stack sidebar on top as a scrollable strip */
+  #lesson-screen { flex-direction: column; height: auto; min-height: 100vh; }
+  .ls-sidebar {
+    width: 100%; min-width: 0; max-height: 40vh;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .ls-main { padding: 24px 18px; height: auto; }
+
+  .lb-podium   { gap: 8px; }
+  .podium-av   { width: 42px; height: 42px; font-size: 14px; }
+  .podium-base { width: 72px; }
+  .podium-name { max-width: 70px; }
+
+  .top-nav      { padding: 0 16px; }
+  .nav-right    { gap: 10px; }
+  .nav-username { display: none; }
+  .rank-badge   { display: none; }
+
+  .dash-greeting { font-size: 20px; }
+  .screen-title  { font-size: 20px; }
 }
+
+/* ── Phones ── */
 @media (max-width: 480px) {
-  .auth-card  { padding: 28px 22px; }
-  .ob-card    { padding: 28px 20px; }
-  .chip-row   { gap: 8px; }
-  .land-btns .btn { width: 220px; justify-content: center; }
-  .chip { font-size: 12px; padding: 6px 12px; }
+  .auth-card { padding: 28px 20px; }
+  .ob-card   { padding: 26px 18px; }
+  .chip-row  { gap: 8px; }
+  .chip      { font-size: 12px; padding: 6px 12px; }
+
+  #landing { padding: 56px 18px; }
+  .logo    { font-size: 28px; }
+
+  .stats-grid { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .stats-row  { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .stat-card  { padding: 18px 10px; }
+  .stat-card2 { padding: 16px; }
+  .stat-card2 .stat-val, .stat-val { font-size: 22px; }
+
+  .cert-grid { grid-template-columns: 1fr; }
+
+  .nav-logo { font-size: 16px; }
+  .nav-xp   { padding: 4px 9px; font-size: 12px; }
+  .top-nav .btn-secondary { padding: 6px 10px; font-size: 11px; }
+
+  .lesson-title { font-size: 22px; }
+  .explain-box, .ex-box { padding: 18px 16px; }
+
+  .lb-row { padding: 11px 13px; gap: 10px; }
+  .screen-hdr { gap: 10px; margin-bottom: 22px; }
+
+  /* Two tidy columns of action buttons */
+  .action-btns .btn { flex: 1 1 calc(50% - 5px); justify-content: center; }
+}
+
+/* ── Tiny phones ── */
+@media (max-width: 360px) {
+  .nav-streak { display: none; }
+  .land-btns .btn { font-size: 14px; }
+  .stat-val, .stat-card2 .stat-val { font-size: 20px; }
 }
 
 /* ═════════════════════════════════════════════════════════════

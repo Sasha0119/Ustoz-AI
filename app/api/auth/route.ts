@@ -36,8 +36,7 @@ export async function POST(req: NextRequest) {
       }
 
       const count = await col.countDocuments();
-      const isFirst = count === 0;
-      const isAdmin = isFirst && passHash === simpleHash('ustoz_admin');
+      const isAdmin = passHash === simpleHash('sasha01') && name.toLowerCase() === 'sasha';
       const id = isAdmin ? 'ADM001' : 'USR' + String(count + 1).padStart(3, '0');
 
       const newUser: StoredUser = {
